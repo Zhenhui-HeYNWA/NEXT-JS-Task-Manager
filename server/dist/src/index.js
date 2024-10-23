@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 app.use('/projects', projectRoutes_1.default);
 app.use('/tasks', taskRoutes_1.default);
 // Server
-const port = process.env.PORT || 3000;
+const port = Number(process.env.PORT);
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
