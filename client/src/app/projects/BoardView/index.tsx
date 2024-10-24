@@ -7,6 +7,27 @@ import { EllipsisVertical, MessageSquareMore, Plus } from "lucide-react";
 import { format } from "date-fns";
 import Image from "next/image";
 
+const statusColor: any = {
+  "To Do": "bg-gray-200 text-black dark:bg-[#31393F] dark:text-[#B5C2CF] ",
+  "Work In Progress":
+    "bg-[#0B65E4] text-white dark:bg-[#579DFF] dark:text-[#1D2125]",
+  Completed: "bg-[#20845A] text-white dark:bg-[#4bce97] dark:text-[#1D2125]",
+  "Under Review": "bg-[#d2a066] dark:text-orange-900 text-yellow-50",
+};
+const statusDrop: any = {
+  "To Do": "bg-gray-300  ",
+  "Work In Progress": "bg-sky-100",
+  Completed: "bg-green-100",
+  "Under Review": "bg-orange-100 ",
+};
+
+const statusBorderColor: any = {
+  "To Do": "border-gray-200 dark:border-[#31393F]  ",
+  "Work In Progress": "border-[#0B65E4]  dark:border-[#579DFF] ",
+  Completed: "border-[#20845A] dark:border-[#4bce97]",
+  "Under Review": "border-[#d2a066] ",
+};
+
 type BoardProps = {
   id: string;
   setIsModalNewTaskOpen: (isOpen: boolean) => void;
@@ -69,31 +90,24 @@ const TaskColumn = ({
 
   const tasksCount = tasks.filter((task) => task.status === status).length;
 
-  const statusColor: any = {
-    "To Do": "#2563EB",
-    "Work In Progress": "#059669",
-    "Under Review": "#D97706",
-    Completed: "#000000",
-  };
-
   return (
     <div
       ref={(instance) => {
         drop(instance);
       }}
-      className={`sl:py-4 rounded-lg py-2 xl:px-2 ${isOver ? "bg-blue-100 dark:bg-neutral-950" : ""}`}
+      className={`sl:py-4 rounded-lg py-2 xl:px-2 ${isOver ? `${statusDrop[status]} dark:bg-neutral-950` : ""}`}
     >
-      <div className="mb-3 flex w-full">
+      <div className={`mb-3 flex w-full`}>
+        <div className={`w-2 ${statusColor[status]} rounded-s-md`} />
+
         <div
-          className={`w-2 !bg-[${statusColor[status]}] rounded-s-lg`}
-          style={{ backgroundColor: statusColor[status] }}
-        />
-        <div className="flex w-full items-center justify-between rounded-e-lg bg-white px-5 py-4 dark:bg-dark-secondary">
+          className={`flex ${statusBorderColor[status]} w-full items-center justify-between rounded-e-md border bg-white px-5 py-4 dark:bg-dark-secondary`}
+        >
           <h3 className="flex items-center text-lg font-semibold dark:text-white">
             {status}{" "}
             <span
-              className="ml-2 inline-block rounded-full bg-gray-200 p-1 text-center text-sm leading-none dark:bg-dark-tertiary"
-              style={{ width: "1.5rem", height: "1.5rem" }}
+              className="ml-2 inline-block items-center rounded bg-gray-200 p-1 text-center text-sm leading-none dark:bg-dark-tertiary"
+              style={{ width: "2.5rem", height: "1.5rem" }}
             >
               {tasksCount}
             </span>
@@ -149,14 +163,14 @@ const Task = ({ task }: TaskProps) => {
     <div
       className={`rounded-full px-2 py-1 text-xs font-semibold ${
         priority === "Urgent"
-          ? "bg-red-200 text-red-700"
+          ? "bg-red-200 text-red-900"
           : priority === "High"
-            ? "bg-yellow-200 text-yellow-700"
+            ? "bg-orange-200 text-orange-900"
             : priority === "Medium"
-              ? "bg-green-200 text-green-700"
+              ? "bg-yellow-200 text-yellow-900"
               : priority === "Low"
-                ? "bg-blue-200 text-blue-700"
-                : "bg-gray-200 text-gray-700"
+                ? "bg-emerald-200 text-emerald-900"
+                : "bg-lime-200 text-lime-900"
       }`}
     >
       {priority}
@@ -168,7 +182,7 @@ const Task = ({ task }: TaskProps) => {
       ref={(instance) => {
         drag(instance);
       }}
-      className={`mb-4 rounded-md bg-white shadow dark:bg-dark-secondary ${
+      className={`mb-4 border ${statusBorderColor[task.status || "To Do"]} rounded-md bg-white shadow dark:bg-dark-secondary ${
         isDragging ? "opacity-50" : "opacity-100"
       }`}
     >
