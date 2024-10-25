@@ -61,13 +61,13 @@ const TaskCard = ({ task }: Props) => {
   const renderBorderColor = statusBorderColor[task?.status ?? "To Do"];
   return (
     <div
-      className={`flex w-full gap-2 rounded-md border ${renderBorderColor} shadow-md`}
+      className={`flex w-full rounded-md border ${renderBorderColor} shadow-md`}
       // Apply dynamic border color
     >
       <div
-        className={`h-full w-5 rounded-s ${renderStatusStyle} border ${renderBorderColor}`}
+        className={`w-5 rounded-s ${renderStatusStyle} border ${renderBorderColor}`}
       />
-      <div className="mb-3 w-full rounded-md bg-white dark:bg-dark-secondary dark:text-white">
+      <div className="w-full rounded-e-md bg-white dark:bg-dark-secondary dark:text-white">
         {task.attachments && task.attachments.length > 0 && (
           <div>
             <strong>Attachments:</strong>
@@ -84,7 +84,7 @@ const TaskCard = ({ task }: Props) => {
             </div>
           </div>
         )}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 p-2">
           <p>
             <strong>ID:</strong>
             {task.id}
@@ -97,18 +97,18 @@ const TaskCard = ({ task }: Props) => {
             <strong>Description:</strong>
             {"   "} {task.description || "No description provided"}
           </p>
-          <p className="flex items-center gap-1">
+          <span className="flex items-center gap-1">
             <strong>Status: </strong>
             <p className={`rounded px-2 py-1 font-bold ${renderStatusStyle}`}>
               {task.status?.toUpperCase()}
             </p>
-          </p>
-          <p className="flex items-center gap-2">
+          </span>
+          <span className="flex items-center gap-2">
             <strong>Priority: </strong>
             <p className="flex items-center justify-start">
               {task.priority} {priorityLogo[task.priority || "Medium"]}
             </p>
-          </p>
+          </span>
           <p>
             <strong>Tags:</strong>
             {task.tags || "No tags"}
