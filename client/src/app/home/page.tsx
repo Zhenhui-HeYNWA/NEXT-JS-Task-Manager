@@ -11,6 +11,7 @@ import React from "react";
 import { useAppSelector } from "../redux";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Header from "@/components/Header";
+import { format } from "date-fns";
 import {
   Bar,
   BarChart,
@@ -24,14 +25,137 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import {
+  ChevronDown,
+  ChevronsDown,
+  ChevronsDownUp,
+  ChevronsUp,
+  ChevronUp,
+  Equal,
+} from "lucide-react";
 import { dataGridClassNames, dataGridSxStyles } from "@/lib/utils";
+import Image from "next/image";
 
 const COLORS = ["#0088fe", "#00c49f", "#ffbb28", "#ff8042"];
+const statusColor: any = {
+  "To Do": "bg-gray-200 text-black dark:bg-[#31393F] dark:text-[#B5C2CF] ",
+  "Work In Progress":
+    "bg-[#0B65E4] text-white dark:bg-[#579DFF] dark:text-[#1D2125]",
+  Completed: "bg-[#20845A] text-white dark:bg-[#4bce97] dark:text-[#1D2125]",
+  "Under Review": "bg-[#d2a066] dark:text-orange-900 text-yellow-50",
+};
+const priorityLogo: any = {
+  Urgent: <ChevronsUp className="h-6 w-6 text-red-500" />,
+  High: <ChevronUp className="h-6 w-6 text-orange-500" />,
+  Medium: <Equal className="text h-6 w-6 text-yellow-300" />,
+  Low: <ChevronDown className="h-6 w-6 text-emerald-400" />,
+  Backlog: <ChevronsDown className="h-6 w-6 text-green-900" />,
+};
 const taskColumns: GridColDef[] = [
-  { field: "title", headerName: "Title", width: 200 },
-  { field: "status", headerName: "Status", width: 150 },
-  { field: "priority", headerName: "Priority", width: 150 },
-  { field: "dueDate", headerName: "Due Date", width: 150 },
+  {
+    field: "title",
+    headerName: "Title",
+    width: 100,
+  },
+  {
+    field: "description",
+    headerName: "Description",
+    width: 200,
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    width: 130,
+    renderCell: (params) => (
+      <span
+        className={`inline-flex rounded shadow-md ${statusColor[params.value]} px-3 text-xs font-semibold leading-5`}
+      >
+        {params.value}
+      </span>
+    ),
+  },
+  {
+    field: "priority",
+    headerName: "Priority",
+    width: 130,
+    renderCell: (params) => (
+      <span className="flex w-full items-center justify-start rounded font-bold">
+        {priorityLogo[params.value]} {params.value}
+      </span>
+    ),
+  },
+  {
+    field: "tags",
+    headerName: "Tags",
+    width: 130,
+    renderCell: (params) => (
+      <span className="rounded bg-blue-100 px-2 py-1 text-xs shadow-md dark:text-black">
+        {params.value}
+      </span>
+    ),
+  },
+  {
+    field: "startDate",
+    headerName: "Start Date",
+    width: 130,
+
+    renderCell: (params) => {
+      return format(new Date(params.value), "P"); // Use params.value to get the date
+    },
+  },
+  {
+    field: "dueDate",
+    headerName: "Due Date",
+    width: 130,
+    renderCell: (params) => {
+      return format(new Date(params.value), "P"); // Use params.value to get the date
+    },
+  },
+  {
+    field: "author",
+    headerName: "Author",
+    width: 150,
+    renderCell: (params) => (
+      <span className="flex items-center gap-2">
+        <Image
+          src={
+            params.value?.profilePictureUrl
+              ? `/${params.value.profilePictureUrl}`
+              : "/avatardefault.png"
+          }
+          alt={`/${params.value?.profilePictureUrl} || ""`}
+          width={30}
+          height={30}
+          className="h-8 w-8 rounded-full border-2 border-white object-cover dark:border-dark-secondary"
+        />
+        {params.value?.username || "Unknown"}
+      </span>
+    ),
+  },
+
+  //Unknown
+
+  {
+    field: "assignee",
+    headerName: "Assignee",
+    width: 150,
+    renderCell: (params) => (
+      <span className="flex items-center gap-2">
+        <Image
+          src={
+            params.value?.profilePictureUrl
+              ? `/${params.value.profilePictureUrl}`
+              : "/avatardefault.png"
+          }
+          alt={`/${params.value?.profilePictureUrl} || "Unassign"`}
+          width={30}
+          height={30}
+          className="h-8 w-8 rounded-full border-2 border-white object-cover dark:border-dark-secondary"
+        />
+        {params.value?.username || "Unassign"}
+      </span>
+    ),
+  },
 ];
 const HomePage = () => {
   const {

@@ -65,7 +65,7 @@ const TimeLine = () => {
             tasks={ganttTasks}
             {...displayOption}
             columnWidth={displayOption.viewMode === ViewMode.Month ? 150 : 100}
-            listCellWidth="100px"
+            listCellWidth="170px"
             projectBackgroundSelectedColor={isDarkMode ? "#101214" : "#1f2937"}
             projectProgressColor={isDarkMode ? "#1f2937" : "#aeb8c2"}
             projectProgressSelectedColor={isDarkMode ? "#000" : "#9ba1a6"}

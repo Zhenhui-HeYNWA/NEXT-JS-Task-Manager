@@ -30,6 +30,7 @@ const TimeLine = ({ id, setIsModalNewTaskOpen }: Props) => {
         type: "Task" as TaskTypeItems,
         progress: task.points ? (task.points / 10) * 100 : 0,
         isDisabled: false,
+        listCellWidth: "300px",
       })) || []
     );
   }, [tasks]);
@@ -69,7 +70,6 @@ const TimeLine = ({ id, setIsModalNewTaskOpen }: Props) => {
             tasks={ganttTasks}
             {...displayOption}
             columnWidth={displayOption.viewMode === ViewMode.Month ? 150 : 100}
-            listCellWidth="100px"
             barBackgroundColor={isDarkMode ? "#0B65E4" : "#aeb8c2"}
             barBackgroundSelectedColor={isDarkMode ? "#000" : "#9ba1a6"}
           />
