@@ -110,6 +110,7 @@ const Sidebar = () => {
         </button>
 
         {/* Projects List */}
+<<<<<<< HEAD
         <AnimatePresence>
           {showProjects && (
             <motion.div
@@ -129,6 +130,17 @@ const Sidebar = () => {
             </motion.div>
           )}
         </AnimatePresence>
+=======
+        {showProjects &&
+          projects?.map((project) => (
+            <SidebarLink
+              key={project.id}
+              icon={Briefcase}
+              label={project.name}
+              href={`/projects/${project.id}`}
+            />
+          ))}
+>>>>>>> ec261e79b5952eeaf836f77165e332483e39cafe
         {/* Priority Links */}
         <button
           onClick={() => setShowPriority((prev) => !prev)}
