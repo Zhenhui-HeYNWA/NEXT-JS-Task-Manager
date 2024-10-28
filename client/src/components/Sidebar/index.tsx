@@ -25,6 +25,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Sidebar = () => {
   const [showProjects, setShowProjects] = useState(true);
@@ -36,12 +37,23 @@ const Sidebar = () => {
     (state) => state.global.isSidebarCollapsed,
   );
 
-  const sidebarClassNames = `fixed flex flex-col h-[100%] justify-between shadow-xl
-  transition-all duration-300 h-full z-40 dark:bg-black overflow-y-auto bg-white 
-  ${isSidebarCollapsed ? "w-0 hidden" : "w-64"}`;
+  const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
 
+  const sidebarClassNames = `fixed flex flex-col h-[100%] justify-between shadow-xl
+    h-full z-40 dark:bg-black overflow-y-auto bg-white 
+  }`;
+
+  const sidebarVariants = {
+    open: { width: "220px", opacity: 1, ease: "linear" },
+    closed: { width: "0px", opacity: 0, ease: "linear" },
+  };
   return (
-    <div className={sidebarClassNames}>
+    <motion.div
+      className={sidebarClassNames}
+      initial="closed"
+      animate={isSidebarCollapsed ? "closed" : "open"}
+      variants={sidebarVariants}
+    >
       <div className="flex h-[100%] w-full flex-col justify-start">
         {/* TOP LOGO */}
         <div className="z-50 flex min-h-[56px] w-64 items-center justify-between bg-white px-6 pt-3 dark:bg-black">
@@ -98,15 +110,25 @@ const Sidebar = () => {
         </button>
 
         {/* Projects List */}
-        {showProjects &&
-          projects?.map((project) => (
-            <SidebarLink
-              key={project.id}
-              icon={Briefcase}
-              label={project.name}
-              href={`/projects/${project.id}`}
-            />
-          ))}
+        <AnimatePresence>
+          {showProjects && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.6, ease: "easeInOut" }}
+            >
+              {projects?.map((project) => (
+                <SidebarLink
+                  key={project.id}
+                  icon={Briefcase}
+                  label={project.name}
+                  href={`/projects/${project.id}`}
+                />
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
         {/* Priority Links */}
         <button
           onClick={() => setShowPriority((prev) => !prev)}
@@ -119,33 +141,45 @@ const Sidebar = () => {
             <ChevronDown className="h-5 w-5" />
           )}
         </button>
-        {showPriority && (
-          <>
-            <SidebarLink
-              icon={AlertCircle}
-              label="Urgent"
-              href="/priority/urgent"
-            />{" "}
-            <SidebarLink
-              icon={ShieldAlert}
-              label="High"
-              href="/priority/high"
-            />{" "}
-            <SidebarLink
-              icon={AlertTriangle}
-              label="Medium"
-              href="/priority/medium"
-            />{" "}
-            <SidebarLink icon={AlertOctagon} label="Low" href="/priority/low" />
-            <SidebarLink
-              icon={Layers3}
-              label="Backlog"
-              href="/priority/backlog"
-            />
-          </>
-        )}
+
+        <AnimatePresence>
+          {showPriority && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.6, ease: "easeInOut" }}
+            >
+              <SidebarLink
+                icon={AlertCircle}
+                label="Urgent"
+                href="/priority/urgent"
+              />{" "}
+              <SidebarLink
+                icon={ShieldAlert}
+                label="High"
+                href="/priority/high"
+              />{" "}
+              <SidebarLink
+                icon={AlertTriangle}
+                label="Medium"
+                href="/priority/medium"
+              />{" "}
+              <SidebarLink
+                icon={AlertOctagon}
+                label="Low"
+                href="/priority/low"
+              />
+              <SidebarLink
+                icon={Layers3}
+                label="Backlog"
+                href="/priority/backlog"
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -153,6 +187,7 @@ interface SidebarLinkProps {
   href: string;
   icon: LucideIcon;
   label: string;
+  isDarkMode?: boolean;
 }
 const SidebarLink = ({ href, icon: Icon, label }: SidebarLinkProps) => {
   const pathname = usePathname();
@@ -161,15 +196,25 @@ const SidebarLink = ({ href, icon: Icon, label }: SidebarLinkProps) => {
 
   return (
     <Link href={href} className="w-full">
-      <div
-        className={`relative flex cursor-pointer items-center gap-3 transition-colors hover:bg-gray-100 dark:bg-black dark:hover:bg-gray-700 ${isActive ? "bg-gray-100 text-white dark:bg-gray-600" : ""} justify-start px-8 py-3`}
-      >
+      <div className="relative flex cursor-pointer items-center justify-start gap-3 overflow-hidden px-8 py-3">
+        {/* Background Fill Overlay */}
+        <motion.div
+          className={`absolute inset-0 bg-gray-100 dark:bg-gray-700`}
+          // initial={{ scaleX: 0 }}
+          // whileHover={{ scaleX: 1 }}
+          animate={{ scaleX: isActive ? 1 : 0 }} // Keeps background if active
+          transition={{ duration: 0.2, ease: "easeInOut" }}
+          style={{ transformOrigin: "left" }}
+        />
+
+        {/* Active Indicator */}
         {isActive && (
-          <div className="absolute left-0 top-0 h-[100%] w-[5px] bg-blue-200" />
+          <div className="absolute left-0 top-0 h-full w-[5px] bg-blue-200" />
         )}
 
-        <Icon className="h-6 w-6 text-gray-800 dark:text-gray-100" />
-        <span className={`font-medium text-gray-800 dark:text-gray-100`}>
+        {/* Icon and Text */}
+        <Icon className="relative z-10 h-6 w-6 text-gray-800 dark:text-gray-100" />
+        <span className="relative z-10 font-medium text-gray-800 dark:text-gray-100">
           {label}
         </span>
       </div>
