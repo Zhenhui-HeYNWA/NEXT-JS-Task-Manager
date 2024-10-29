@@ -110,27 +110,6 @@ const Sidebar = () => {
         </button>
 
         {/* Projects List */}
-<<<<<<< HEAD
-        <AnimatePresence>
-          {showProjects && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.6, ease: "easeInOut" }}
-            >
-              {projects?.map((project) => (
-                <SidebarLink
-                  key={project.id}
-                  icon={Briefcase}
-                  label={project.name}
-                  href={`/projects/${project.id}`}
-                />
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-=======
         {showProjects &&
           projects?.map((project) => (
             <SidebarLink
@@ -140,7 +119,6 @@ const Sidebar = () => {
               href={`/projects/${project.id}`}
             />
           ))}
->>>>>>> ec261e79b5952eeaf836f77165e332483e39cafe
         {/* Priority Links */}
         <button
           onClick={() => setShowPriority((prev) => !prev)}
