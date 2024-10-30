@@ -17,8 +17,8 @@ const UserCard = ({ user }: Props) => {
           <Image
             src={
               user.profilePictureUrl
-                ? `/${user.profilePictureUrl}`
-                : "/avatardefault.png"
+                ? `https://pm-s3-images-herbert.s3.us-east-1.amazonaws.com/${user.profilePictureUrl}`
+                : "https://pm-s3-images-herbert.s3.us-east-1.amazonaws.com/avatardefault.png"
             }
             alt="profile picture"
             width={64}

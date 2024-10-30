@@ -100,8 +100,8 @@ const columns: GridColDef[] = [
         <Image
           src={
             params.value?.profilePictureUrl
-              ? `/${params.value.profilePictureUrl}`
-              : "/avatardefault.png"
+              ? `https://pm-s3-images-herbert.s3.us-east-1.amazonaws.com/${params.value.profilePictureUrl}`
+              : "https://pm-s3-images-herbert.s3.us-east-1.amazonaws.com/avatardefault.png"
           }
           alt={`/${params.value?.profilePictureUrl} || ""`}
           width={30}
@@ -124,8 +124,8 @@ const columns: GridColDef[] = [
         <Image
           src={
             params.value?.profilePictureUrl
-              ? `/${params.value.profilePictureUrl}`
-              : "/avatardefault.png"
+              ? `https://pm-s3-images-herbert.s3.us-east-1.amazonaws.com/${params.value.profilePictureUrl}`
+              : "https://pm-s3-images-herbert.s3.us-east-1.amazonaws.com/avatardefault.png"
           }
           alt={`/${params.value?.profilePictureUrl} || "Unassign"`}
           width={30}
