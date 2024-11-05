@@ -93,12 +93,12 @@ export const api = createApi({
         try {
           const user = await getCurrentUser();
           const session = await fetchAuthSession();
-          if (!session) throw new Error("Not session found");
+          if (!session) throw new Error("No session found");
           const { userSub } = session;
           const { accessToken } = session.tokens ?? {};
 
-          const userDetailResponse = await fetchWithBQ(`users/${userSub}`);
-          const userDetails = userDetailResponse.data as User;
+          const userDetailsResponse = await fetchWithBQ(`users/${userSub}`);
+          const userDetails = userDetailsResponse.data as User;
 
           return { data: { user, userSub, userDetails } };
         } catch (error: any) {

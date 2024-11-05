@@ -25,9 +25,12 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
 
     res.json(user);
   } catch (error: any) {
-    res.status(500).json({ message: `Error retrieving user:${error.message}` });
+    res
+      .status(500)
+      .json({ message: `Error retrieving user: ${error.message}` });
   }
 };
+
 
 export const postUser = async (req: Request, res: Response) => {
   try {
