@@ -39,18 +39,15 @@ const Sidebar = () => {
   );
 
   const { data: currentUser } = useGetAuthUserQuery({});
-
   const handleSignOut = async () => {
     try {
       await signOut();
     } catch (error) {
-      console.error("Error signing out", error);
+      console.error("Error signing out: ", error);
     }
   };
-
   if (!currentUser) return null;
   const currentUserDetails = currentUser?.userDetails;
-  const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
 
   const sidebarClassNames = `fixed flex flex-col h-[100%] justify-between shadow-xl
     h-full z-40 dark:bg-black overflow-y-auto bg-white 
